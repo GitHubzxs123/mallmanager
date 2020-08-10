@@ -3,10 +3,13 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import MyHttpSever from '@/plugins/http.js'
+import '@/assets/css/reset.css'
 import App from './App'
 import router from './router'
 
 Vue.use(ElementUI)
+Vue.use(MyHttpSever)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
