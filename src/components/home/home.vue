@@ -2,21 +2,21 @@
   <el-container class="container">
   <el-header class="header">
     <el-row>
-      <el-col :span="2"><div class="grid-content bg-purple"><img src="" alt="图片"></div></el-col>
-      <el-col :span="20"><h3 class="title">电商后台管理系统</h3></el-col>
-      <el-col :span="2"><a href="#" class="signUp">退出</a></el-col>
+      <el-col :span="2"><div class="grid-content bg-purple"><img style="width: 80px; height: 60px" src="" alt=""></div></el-col>
+      <el-col :span="20"><h2 class="title">后台管理系统</h2></el-col>
+      <el-col :span="2"><a href="#" class="signOut" @click.prevent="handleSignout">退出</a></el-col>
     </el-row>
   </el-header>
   <el-container>
     <el-aside width="200px" class="aside">
-      <el-menu :unique-opened="true">
+      <el-menu :unique-opened="true" :router="true">
           <!-- 1 -->
         <el-submenu index="1">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>用户管理</span>
           </template>
-          <el-menu-item index="1-1">
+          <el-menu-item index="users">
             <i class="el-icon-location"></i>
             <span>用户列表</span>
           </el-menu-item>
@@ -79,38 +79,58 @@
         </el-submenu>
       </el-menu>
     </el-aside>
-    <el-main class="main">Main</el-main>
+    <el-main class="main">
+      <router-view/>
+    </el-main>
   </el-container>
 </el-container>
 </template>
 
 <script>
-
+export default {
+  beforeCreate () {
+    // 如果没有token值 则访问home的url直接进入登录页面
+    const token = localStorage.getItem('token')
+    if (!token) {
+      this.$router.push({name: 'login'})
+    }
+  },
+  methods: {
+    handleSignout () {
+      // 清除缓存中的token值
+      localStorage.clear()
+      // 提示退出成功
+      this.$message.success('退出成功')
+      // 跳转到login页
+      this.$router.push({name: 'login'})
+    }
+  }
+}
 </script>
 
 <style scoped>
 .container{
-  width: 100%;
   height: 100%;
 }
 .header{
   background: #b3c0d1;
-  padding: 0;
 }
 .aside{
   background: #d3dce6;
 }
 .main{
   background: #e9eef3;
-  padding: 0;
 }
 .title{
   text-align: center;
+  margin: 0;
+  margin-top: 13px;
   color: #fff;
 }
-.signUp{
-  line-height: 60px;
+.signOut{
+  line-height: 70px;
+  margin-left: 60px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
 }
 </style>

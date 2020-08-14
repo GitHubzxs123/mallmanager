@@ -3,12 +3,12 @@
     <el-form label-position="top" label-width="80px" :model="formdata" class="login-form">
       <h2>用户登录</h2>
       <el-form-item label="用户名">
-          <el-input v-model="formdata.username"></el-input>
+        <el-input v-model="formdata.username"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-          <el-input v-model="formdata.password"></el-input>
+        <el-input v-model="formdata.password"></el-input>
       </el-form-item>
-       <el-button @click.prevent="handleLogin()" class="login-button" type="primary">登录</el-button>
+      <el-button @click.prevent="handleLogin()" class="login-button" type="primary">登录</el-button>
     </el-form>
   </div>
 </template>
@@ -24,10 +24,20 @@ export default {
     }
   },
   methods: {
-    handleLogin () {
-      this.$http.post('login', this.formdata).then(res => {
-        console.log(res)
-      })
+    async handleLogin () {
+      const res = await this.$http.post('login', this.formdata)
+      const {
+        data,
+        meta: { msg, status }
+      } = res.data
+      if (status === 200) {
+        // 保存token值
+        localStorage.setItem('token', data.token)
+        this.$router.push({ name: 'home' })
+        this.$message.success(msg)
+      } else {
+        this.$message.warning(msg)
+      }
     }
   }
 }
@@ -48,6 +58,6 @@ export default {
   border-radius: 8px;
 }
 .login-button {
-  width :100%;
+  width: 100%;
 }
 </style>
